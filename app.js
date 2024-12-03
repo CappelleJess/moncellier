@@ -90,7 +90,7 @@ function showWines(wines) {
     let strListe = '';
 
     wines.forEach(wine => {
-        strListe += '<li class="list-group-item" data-id "'+wine.id+'">'+wine.name+'</li>';
+        strListe += '<li class="list-group-item" data-id="'+wine.id+'">'+wine.name+'</li>';
     });
     
     wineListUL.innerHTML = strListe;
@@ -109,8 +109,13 @@ function showWines(wines) {
             if(result.length>0) {
                 let wine = result[0];
 
-                const wineDetails = document.querySelector('#wine-details');
-                wineDetails.innerHTML = wine.id;   
+                //const wineDetails = document.querySelector('#wine-details');
+
+                const badge = document.querySelector('#wine-details span.badge');
+                badge.innerHTML = '#'+wine.id;   
+            
+                const wineName = document.querySelector('#wine-details span.badge');
+                badge.innerHTML = '#'+wine.id;   
             }
             //TODO Afficher le détail dans la zone de droite
         });
