@@ -167,9 +167,9 @@ function showWines(wines) {
                 const imgCountryflag = wineDetails.querySelector('span.country-flag img');
                 imgCountryflag.src = 'https://flagsapi.com/'+countryCode+'/flat/64.png';
 
-                //TODO: Nav&Tabs (Description, Commentaires, ...)
+                const wineDescription = wineDetails.querySelector('#description');
+                wineDescription.innerHTML = wine.description;
             }
-
             //TODO: Requête AJAX récupérer les commentaires du vin sélectionnée (GET api/comments) + (GET api/notes/authorization)
         });
     });
