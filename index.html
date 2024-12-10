@@ -75,12 +75,17 @@
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">
-                                    <h5 class="card-title">
-                                        <span class="badge text-bg-secondary">#15</span>
-                                        <span class="wine-name">Beaujolais</span>
-                                        <span class="country-flag"><img src="https://flagsapi.com/FR/flat/64.png"></span>
-                                    </h5>
+                                    <h5 class="card-title"><span class="badge text-bg-secondary">#15</span><span class="wine-name">Beaujolais</span></h5>
                                     <p class="card-text"><span class="wine-info">Grapes :</span> <span class="wine-grapes">Pinot Noir</span></p>
+                                    <p class="card-text"><span class="wine-info">Country :</span> 
+                                        <span class="wine-country">France</span> <span class="country-flag"><img src="https://flagsapi.com/FR/flat/64.png"></span>
+                                    </p>
+                                    <p class="card-text"><span class="wine-info">Region :</span> <span class="wine-region">Bordeaux</span></p>
+                                    <p class="card-text"><span class="wine-info">Year :</span> <span class="wine-year">2000</span></p>
+                                    <p class="card-text"><span class="wine-info">Capacity :</span> <span class="wine-capacity">75</span></p>
+                                    <p class="card-text"><span class="wine-info">Color :</span> <span class="wine-color">Rouge</span></p>
+                                    <p class="card-text"><span class="wine-info">Price :</span> <span class="wine-price">20 €</span></p>
+
                                     <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
                                     <button type="button" class="btn btn-light"> <i class="bi bi-camera"></i>  Add a picture (1/3)</button>
                                     <button type="button" class="btn btn-light"> <i class="bi bi-pencil"></i>  Add a note</button>
@@ -97,16 +102,16 @@
                     </div>
                 </div>
                 <div class="row"><ul class="nav nav-tabs">
-                    <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#">Description</a>
+                    <li class="nav-item" role="presentation">
+                      <a class="nav-link active" id="description-tab" aria-current="page" href="#">Description</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Commentaires</a>
+                    <li class="nav-item" role="presentation">
+                      <a class="nav-link" id="comment-tab" href="#">Commentaires</a>
                     </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Notes personnelles</a>
+                    <li class="nav-item" role="presentation">
+                      <a class="nav-link" id="note-tab" href="#">Notes personnelles</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" role="presentation">
                       <a class="nav-link disabled" aria-disabled="true">Disabled</a>
                     </li>
                   </ul></div>

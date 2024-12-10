@@ -49,11 +49,6 @@ fetch(API_URL + '/api/wines/countries')
 //Fonctionnalités
 const frmSearch = document.getElementById('frmSearch');
 
-// Update countrycode dans localStorage
-//const countryCode = ['AR', 'AT', 'FR', 'DE', 'HU', 'IT', 'PT', 'ES', 'US'];
-
-
-
 frmSearch.addEventListener('submit', function(e) {  console.log('Lancement de la recherche...');
     e.preventDefault();
 
@@ -114,21 +109,68 @@ function showWines(wines) {
             
             if(result.length>0) {
                 let wine = result[0];
-
-                // const wineDetails = document.querySelector('#wine-details');
-                // const wineName = document.querySelector('#wine-details span.badge');
-                // wineName.innerHTML = wine.name;  
                 
+                //Récupérer l'id du vin sur le badge
+                const wineDetails = document.querySelector('#wine-details');
                 const badge = document.querySelector('#wine-details span.badge');
                 badge.innerHTML = '#'+wine.id;  
                 
+                //Récuperer le nom du vin
                 const wineName = document.querySelector('#wine-details span.wine-name');
                 wineName.innerHTML = wine.name;
 
+                const wineCountry = wineDetails.querySelector('span.wine-country');
+                wineCountry.innerHTML = wine.country;
                 
-            }
-            //TODO Afficher le détail dans la zone de droite
+                const wineRegion = wineDetails.querySelector('span.wine-region');
+                wineRegion.innerHTML = wine.region;
 
+                const wineYear = wineDetails.querySelector('span.wine-year');
+                wineYear.innerHTML = wine.year;
+                
+                const wineCapacity = wineDetails.querySelector('span.wine-capacity');
+                wineCapacity.innerHTML = Math.floor(wine.capacity) + ' cl';
+                
+                const wineColor = wineDetails.querySelector('span.wine-color');
+                let couleur;
+
+                switch(wine.color) {
+                    case 'red': couleur = 'Rouge'; break;
+                    case 'white': couleur = 'Blanc'; break;
+                    case 'pink': couleur = 'Rosé'; break;
+                }
+                wineColor.innerHTML = couleur;
+                
+                const winePrice = wineDetails.querySelector('span.wine-price');
+                winePrice.innerHTML = String(wine.price).replace('.', ',') + ' €';
+                
+                const countryCodes = {
+                    /*'Argentina':{ 
+                        '2D': 'AR',
+                        '3D': 'AR',
+                        'fr': 'Argentine',},
+                    */
+
+                    'Argentina': 'AR',
+                    'Austria': 'AT',
+                    'France': 'FR',
+                    'Germany': 'DE',
+                    'Hungary': 'HU',
+                    'Italy': 'IT',
+                    'Portugal': 'PT',
+                    'Spain': 'ES',
+                    'USA': 'US',
+                };
+
+                let countryCode = countryCodes[wine.country]/*.2D*/; 
+                
+                const imgCountryflag = wineDetails.querySelector('span.country-flag img');
+                imgCountryflag.src = 'https://flagsapi.com/'+countryCode+'/flat/64.png';
+
+                //TODO: Nav&Tabs (Description, Commentaires, ...)
+            }
+
+            //TODO: Requête AJAX récupérer les commentaires du vin sélectionnée (GET api/comments) + (GET api/notes/authorization)
         });
     });
 }
