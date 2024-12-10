@@ -38,6 +38,7 @@ fetch(API_URL + '/api/wines/countries')
         data.forEach(info => {  //console.log(info.country);
             frmFilter.country.innerHTML += '<option>'+info.country+'</option>';
         });
+
 /*
         for(let info of data) { //console.log(info.country);
             frmFilter.country.innerHTML += '<option>'+info.country+'</option>';
@@ -47,6 +48,11 @@ fetch(API_URL + '/api/wines/countries')
 
 //Fonctionnalités
 const frmSearch = document.getElementById('frmSearch');
+
+// Update countrycode dans localStorage
+//const countryCode = ['AR', 'AT', 'FR', 'DE', 'HU', 'IT', 'PT', 'ES', 'US'];
+
+
 
 frmSearch.addEventListener('submit', function(e) {  console.log('Lancement de la recherche...');
     e.preventDefault();
@@ -105,19 +111,24 @@ function showWines(wines) {
 
             //Rechercher dans localStorage le vin sélectionné
             let result = JSON.parse(localStorage.wines).filter( wine => wine.id==this.dataset.id );
-
+            
             if(result.length>0) {
                 let wine = result[0];
 
-                //const wineDetails = document.querySelector('#wine-details');
-
+                // const wineDetails = document.querySelector('#wine-details');
+                // const wineName = document.querySelector('#wine-details span.badge');
+                // wineName.innerHTML = wine.name;  
+                
                 const badge = document.querySelector('#wine-details span.badge');
-                badge.innerHTML = '#'+wine.id;   
-            
-                const wineName = document.querySelector('#wine-details span.badge');
-                badge.innerHTML = '#'+wine.id;   
+                badge.innerHTML = '#'+wine.id;  
+                
+                const wineName = document.querySelector('#wine-details span.wine-name');
+                wineName.innerHTML = wine.name;
+
+                
             }
             //TODO Afficher le détail dans la zone de droite
+
         });
     });
 }
