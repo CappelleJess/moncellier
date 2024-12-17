@@ -198,7 +198,7 @@ function showWines(wines) {
 //Récupérer les commentaires
 const commentsTab = document.getElementById('comments-tab');
 
-commentsTab.addEventListener('click', function(e) { console.log('Affichage des commentaires')
+commentsTab.addEventListener('click', function(e) { console.log('Affichage des commentaires...');
     //TODO améliorer le gestionnaire d'événements en choisissant un event lié à l'affichage du panel (classes CSS 'active show')
     //-->neutraliser le fetch des commentaires pour qu'il ne se fasse qu'une fois par vin
 
@@ -216,9 +216,7 @@ commentsTab.addEventListener('click', function(e) { console.log('Affichage des c
 
         //Afficher les commentaires
         const commentsInfosSpan = document.querySelector('#comments-infos span');
-        commentsInfosSpan.innerHTML = data.length + (data.length > 1?' commentaires.':'commentaire.');
-
-        const wineComments = document.getElementById('wine-comments');
+        commentsInfosSpan.innerHTML = data.length + (data.length>1?' commentaires.':' commentaire.');
 
         data.forEach(comment => {
             //Récupérer le login du user qui a commenté sur base de son user_id
