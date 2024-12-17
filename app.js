@@ -167,10 +167,30 @@ function showWines(wines) {
                 const imgCountryflag = wineDetails.querySelector('span.country-flag img');
                 imgCountryflag.src = 'https://flagsapi.com/'+countryCode+'/flat/64.png';
 
-                const wineDescription = wineDetails.querySelector('#description');
+                const wineDescription = document.querySelector('#description');
                 wineDescription.innerHTML = wine.description;
             }
+            
             //TODO: Requête AJAX récupérer les commentaires du vin sélectionnée (GET api/comments) + (GET api/notes/authorization)
+            const wineId = this.dataset.id;
+            const apiURL = 'https://cruth.phpnet.org/epfc/caviste/public/index.php/api';
+            const options = {
+                'method': 'GET',
+                'mode': 'cors',
+                'headers': {
+                    'Authorization': 'Basic '+btoa('ced:123')
+                }
+            };
+
+            const fetchURL = '/wines/'+wineId+'/comments';
+
+            fetch(apiURL + fetchURL, options).then(function(response) {
+                if(response.ok) {
+                    response.json().then(function(data){
+                        console.log(data);
+                    });
+                }
+            });
         });
     });
 }
