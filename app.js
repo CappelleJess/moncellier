@@ -4,6 +4,7 @@ let endpoint = '/api/wines';
 const wineListUL = document.getElementById('wine-list');
 
 console.log('ok');
+
 //Récupérer tous les vins sur l'api Rest
 
 fetch(API_URL + endpoint)
@@ -46,6 +47,15 @@ fetch(API_URL + '/api/wines/countries')
 */
     });
 
+//Sauvegarder la liste des users (avec leur id) pour l'affichage de leurs commentaires
+endpoint = '/api/users';
+
+fetch(API_URL + endpoint)
+    .then(response => response.json())
+    .then(data => { //console.log(data);
+        localStorage.setItem('users', JSON.stringify(data));
+    });
+
 //Fonctionnalités
 const frmSearch = document.getElementById('frmSearch');
 
@@ -84,7 +94,6 @@ frmFilter.addEventListener('submit', (e)=> {    console.log('Lancement du filtre
     console.log(result);
 });
 
-
 function showWines(wines) {
     //Vider la liste HTML
     wineListUL.innerHTML = '';
@@ -109,6 +118,8 @@ function showWines(wines) {
             
             if(result.length>0) {
                 let wine = result[0];
+                //Sauver le vin sélectionné pour les besoins ultérieurs (commentaires, notes perso...)
+                localStorage.setItem('wine', JSON.stringify(wine));
                 
                 //Récupérer l'id du vin sur le badge
                 const wineDetails = document.querySelector('#wine-details');
@@ -169,28 +180,69 @@ function showWines(wines) {
 
                 const wineDescription = document.querySelector('#description');
                 wineDescription.innerHTML = wine.description;
-            }
             
-            //TODO: Requête AJAX récupérer les commentaires du vin sélectionnée (GET api/comments) + (GET api/notes/authorization)
-            const wineId = this.dataset.id;
-            const apiURL = 'https://cruth.phpnet.org/epfc/caviste/public/index.php/api';
-            const options = {
-                'method': 'GET',
-                'mode': 'cors',
-                'headers': {
-                    'Authorization': 'Basic '+btoa('ced:123')
-                }
-            };
+                //Activer l'onglet "Description"
+                const descriptionTab = document.querySelector('#description-tab');
+                descriptionTab.click();
 
-            const fetchURL = '/wines/'+wineId+'/comments';
+                //Effacer les commentaires et les notes personnelles du précédent vin
 
-            fetch(apiURL + fetchURL, options).then(function(response) {
-                if(response.ok) {
-                    response.json().then(function(data){
-                        console.log(data);
-                    });
-                }
-            });
+
+                const divNotes = document.querySelector('#notes');
+                divNotes.innerHTML = '';
+            }
         });
     });
 }
+
+//Récupérer les commentaires
+const commentsTab = document.getElementById('comments-tab');
+
+commentsTab.addEventListener('click', function(e) { console.log('Affichage des commentaires')
+    //TODO améliorer le gestionnaire d'événements en choisissant un event lié à l'affichage du panel (classes CSS 'active show')
+    //-->neutraliser le fetch des commentaires pour qu'il ne se fasse qu'une fois par vin
+
+    //Récupérer les commentaires du vin sélectionné
+        //Récupérer l'id du vin sélectionné
+    let wine = JSON.parse(localStorage.wine);       //console.log('vin sélectionné: ',wine);
+
+    endpoint = '/api/wines/'+wine.id+'/comments';
+
+    fetch(API_URL + endpoint)
+    .then(response => response.json())
+    .then(data => { console.log(data);
+        //Sauvegarder localement
+        localStorage.setItem('comments', JSON.stringify(data));
+
+        //Afficher les commentaires
+        const commentsInfosSpan = document.querySelector('#comments-infos span');
+        commentsInfosSpan.innerHTML = data.length + (data.length > 1?' commentaires.':'commentaire.');
+
+        const wineComments = document.getElementById('wine-comments');
+
+        data.forEach(comment => {
+            //Récupérer le login du user qui a commenté sur base de son user_id
+            const users = JSON.parse(localStorage.users);
+            
+            let result = users.filter(user => user.id === comment.user_id)
+
+            let user = result[0];
+
+            let li = document.createElement('li');
+            li.classList.add('list-group-item');
+
+            let p = document.createElement('p');
+            p.innerHTML = '<strong class="comment-author">'+user.login+'</strong>'
+            
+            let div = document.createElement('div');
+            div.innerHTML = comment.content;
+
+            li.appendChild(p);
+            li.appendChild(div);
+
+            wineComments.appendChild(li);
+        });
+    });
+});
+
+//TODO récupérer notes personnelles
