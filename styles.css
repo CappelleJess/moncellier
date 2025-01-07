@@ -1,25 +1,25 @@
 /* Police des titres */
 .charm-regular {
-  font-family: "Charm", cursive;
-  font-weight: 400;
-  font-style: normal;
-}
+    font-family: "Charm", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  .charm-bold {
+    font-family: "Charm", cursive;
+    font-weight: 700;
+    font-style: normal;
+  }
 
-.charm-bold {
-  font-family: "Charm", cursive;
-  font-weight: 700;
-  font-style: normal;
-}
 
+  header h1 {
+    font-size: 2em;
+    display: inline;
+  }
 
-header h1 {
-  font-size: 2em;
-  display: inline;
-}
+  /* DEBUG bordure des trames
+  div { border:1px solid black; } */
 
-/* DEBUG bordure des trames
-div { border:1px solid black; } */
-
-#wine-comments {
-  margin-top: 5px;
-}
+  #wine-comments {
+    margin-top : 5px;
+  }

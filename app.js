@@ -4,7 +4,6 @@ let endpoint = '/api/wines';
 const wineListUL = document.getElementById('wine-list');
 
 console.log('ok');
-
 //Récupérer tous les vins sur l'api Rest
 
 fetch(API_URL + endpoint)
@@ -39,7 +38,6 @@ fetch(API_URL + '/api/wines/countries')
         data.forEach(info => {  //console.log(info.country);
             frmFilter.country.innerHTML += '<option>'+info.country+'</option>';
         });
-
 /*
         for(let info of data) { //console.log(info.country);
             frmFilter.country.innerHTML += '<option>'+info.country+'</option>';
@@ -51,10 +49,11 @@ fetch(API_URL + '/api/wines/countries')
 endpoint = '/api/users';
 
 fetch(API_URL + endpoint)
-    .then(response => response.json())
-    .then(data => { //console.log(data);
-        localStorage.setItem('users', JSON.stringify(data));
-    });
+.then(response => response.json())
+.then(data => { //console.log(data);
+    localStorage.setItem('users', JSON.stringify(data));
+});
+
 
 //Fonctionnalités
 const frmSearch = document.getElementById('frmSearch');
@@ -94,6 +93,7 @@ frmFilter.addEventListener('submit', (e)=> {    console.log('Lancement du filtre
     console.log(result);
 });
 
+
 function showWines(wines) {
     //Vider la liste HTML
     wineListUL.innerHTML = '';
@@ -115,79 +115,88 @@ function showWines(wines) {
 
             //Rechercher dans localStorage le vin sélectionné
             let result = JSON.parse(localStorage.wines).filter( wine => wine.id==this.dataset.id );
-            
+
             if(result.length>0) {
                 let wine = result[0];
+
                 //Sauver le vin sélectionné pour les besoins ultérieurs (commentaires, notes perso...)
-                localStorage.setItem('wine', JSON.stringify(wine));
-                
-                //Récupérer l'id du vin sur le badge
+                localStorage.setItem('wine',JSON.stringify(wine));
+
                 const wineDetails = document.querySelector('#wine-details');
-                const badge = document.querySelector('#wine-details span.badge');
-                badge.innerHTML = '#'+wine.id;  
-                
-                //Récuperer le nom du vin
-                const wineName = document.querySelector('#wine-details span.wine-name');
+                const badge = wineDetails.querySelector('#wine-details span.badge');
+                badge.innerHTML = '#'+wine.id;
+
+                const wineName = wineDetails.querySelector('#wine-details span.wine-name');
                 wineName.innerHTML = wine.name;
 
                 const wineCountry = wineDetails.querySelector('span.wine-country');
                 wineCountry.innerHTML = wine.country;
-                
+
                 const wineRegion = wineDetails.querySelector('span.wine-region');
                 wineRegion.innerHTML = wine.region;
 
                 const wineYear = wineDetails.querySelector('span.wine-year');
                 wineYear.innerHTML = wine.year;
-                
+
                 const wineCapacity = wineDetails.querySelector('span.wine-capacity');
                 wineCapacity.innerHTML = Math.floor(wine.capacity) + ' cl';
-                
+
                 const wineColor = wineDetails.querySelector('span.wine-color');
                 let couleur;
-
+                
                 switch(wine.color) {
                     case 'red': couleur = 'Rouge'; break;
                     case 'white': couleur = 'Blanc'; break;
                     case 'pink': couleur = 'Rosé'; break;
                 }
-                wineColor.innerHTML = couleur;
-                
-                const winePrice = wineDetails.querySelector('span.wine-price');
-                winePrice.innerHTML = String(wine.price).replace('.', ',') + ' €';
-                
-                const countryCodes = {
-                    /*'Argentina':{ 
-                        '2D': 'AR',
-                        '3D': 'AR',
-                        'fr': 'Argentine',},
-                    */
 
-                    'Argentina': 'AR',
-                    'Austria': 'AT',
-                    'France': 'FR',
-                    'Germany': 'DE',
-                    'Hungary': 'HU',
-                    'Italy': 'IT',
-                    'Portugal': 'PT',
-                    'Spain': 'ES',
-                    'USA': 'US',
+                wineColor.innerHTML = couleur;
+
+                const winePrice = wineDetails.querySelector('span.wine-price');
+                winePrice.innerHTML = String(wine.price).replace('.',',') + ' €';
+
+                const countryCodes = {
+                    /*
+                    'Argentina':{
+                        '2D':'AR',
+                        '3D':'ARG',
+                        'fr':'Argentine',
+                    },
+                    */
+                    'Argentina':'AR',
+                    'Austria':'AT',
+                    'Belgium':'BE',
+                    'France':'FR',
+                    'Germany':'DE',
+                    'Hungary':'HU',
+                    'Italy':'IT',
+                    'Portugal':'PT',
+                    'Spain':'ES',
+                    'USA':'US',
                 };
 
-                let countryCode = countryCodes[wine.country]/*.2D*/; 
-                
+                let countryCode = countryCodes[wine.country];
+
                 const imgCountryflag = wineDetails.querySelector('span.country-flag img');
                 imgCountryflag.src = 'https://flagsapi.com/'+countryCode+'/flat/64.png';
 
                 const wineDescription = document.querySelector('#description');
                 wineDescription.innerHTML = wine.description;
-            
-                //Activer l'onglet "Description"
+
+                //Activer l'onglet "Description" pour éviter d'afficher les commentaires ou notes perso du précédent vin
                 const descriptionTab = document.querySelector('#description-tab');
                 descriptionTab.click();
 
-                //Effacer les commentaires et les notes personnelles du précédent vin
+                //Effacer les commentaires du précédent vin
+                const pCommentsInfosSpan = document.querySelector('#comments #comments-infos span');
+                pCommentsInfosSpan.innerHTML = '';
+                const ulWineComments = document.querySelector('#comments #wine-comments');
+                ulWineComments.innerHTML = '';
 
+                //Afficher l'animation de chargement des commentaires
+                document.querySelector('#comments > video').hidden = false;
 
+                //Effacer les notes personnelles du précédent vin
                 const divNotes = document.querySelector('#notes');
                 divNotes.innerHTML = '';
             }
@@ -195,12 +204,15 @@ function showWines(wines) {
     });
 }
 
-//Récupérer les commentaires
+//Récupération et affichage des commentaires
 const commentsTab = document.getElementById('comments-tab');
 
-commentsTab.addEventListener('click', function(e) { console.log('Affichage des commentaires...');
+commentsTab.addEventListener('click', function(e) {  console.log('Affichage des commentaires...');
     //TODO améliorer le gestionnaire d'événements en choisissant un event lié à l'affichage du panel (classes CSS 'active show')
-    //-->neutraliser le fetch des commentaires pour qu'il ne se fasse qu'une fois par vin
+
+    //Réinitialiser la liste (effacer les commentaires déjà afichés)
+    const wineComments = document.getElementById('wine-comments');
+    wineComments.innerHTML = '';
 
     //Récupérer les commentaires du vin sélectionné
         //Récupérer l'id du vin sélectionné
@@ -210,9 +222,12 @@ commentsTab.addEventListener('click', function(e) { console.log('Affichage des c
 
     fetch(API_URL + endpoint)
     .then(response => response.json())
-    .then(data => { console.log(data);
+    .then(data => { //console.log(data);
         //Sauvegarder localement
         localStorage.setItem('comments', JSON.stringify(data));
+
+        //Cacher l'animation de chargement
+        document.querySelector('#comments > video').hidden = true;
 
         //Afficher les commentaires
         const commentsInfosSpan = document.querySelector('#comments-infos span');
@@ -221,17 +236,17 @@ commentsTab.addEventListener('click', function(e) { console.log('Affichage des c
         data.forEach(comment => {
             //Récupérer le login du user qui a commenté sur base de son user_id
             const users = JSON.parse(localStorage.users);
-            
-            let result = users.filter(user => user.id === comment.user_id)
 
+            let result = users.filter(user => user.id === comment.user_id);
             let user = result[0];
 
+            //Affichage
             let li = document.createElement('li');
             li.classList.add('list-group-item');
 
             let p = document.createElement('p');
             p.innerHTML = '<strong class="comment-author">'+user.login+'</strong>'
-            
+
             let div = document.createElement('div');
             div.innerHTML = comment.content;
 
@@ -242,5 +257,3 @@ commentsTab.addEventListener('click', function(e) { console.log('Affichage des c
         });
     });
 });
-
-//TODO récupérer notes personnelles
