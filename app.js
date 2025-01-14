@@ -324,7 +324,6 @@ commentsTab.addEventListener('click', function(e) {  console.log('Affichage des 
             //Affichage
             let li = document.createElement('li');
             li.classList.add('list-group-item');
-            li.dataset.commentId = comment.id;
 
             let p = document.createElement('p');
             p.innerHTML = '<strong class="comment-author">'+user.login+'</strong>'
@@ -332,48 +331,11 @@ commentsTab.addEventListener('click', function(e) {  console.log('Affichage des 
             let div = document.createElement('div');
             div.innerHTML = comment.content;
 
-            //Boutons U/D
-            let editBtn = document.createElement('button');
-
-            //editBtn.textContent = 'Modifier';
-            editBtn.classList.add('wine-comments');
-            editBtn.addEventListener('click', () => editComment(comment));
-
             li.appendChild(p);
             li.appendChild(div);
-            li.appendChild(editBtn);
 
             wineComments.appendChild(li);
         });
     });
-            // Modification d'un commentaire
-            endpoint = '/api/wines/'+wine.id+'/comments';
-
-            function editComment(comment) {
-                let newCom = prompt('Modifier le commentaire :', comment.content);
-                if(newCom !== null) {
-                    const options = {
-                        method: 'PUT',
-                        body: JSON.stringify({ content: newContent }),
-                        mode: 'cors',
-                        headers: {
-                            'content-type': 'application/json; charset=utf-8',
-                            'Authorization': 'Basic '+btoa('ced:123')
-                        },
-                    };
-            
-                    fetch(API_URL + endpoint)
-                        .then((response) => response.json())
-                        .then((data) => {
-                            if (data.success) {
-                                alert('Commentaire modifié avec succès.');
-                                commentsTab.click(); // Rafraîchit la liste des commentaires
-                            } else {
-                                alert('Erreur lors de la modification.');
-                            }
-                        });
-                }
-            }
-
 });
 
